@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Testbed">
+      <UniqueIdentifier>{f657d089-03e4-47d1-bde5-862bed9ade43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games">
+      <UniqueIdentifier>{9c8e553c-54d4-4925-9418-9ef99ad0f15a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{39ccac0b-96d9-4bca-8a89-fe98417680f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Application">
+      <UniqueIdentifier>{bdd19da2-0715-49f4-8190-b544ebb2506c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Application\Headers">
+      <UniqueIdentifier>{da4d0589-e90c-4c4c-b02d-ab89389df486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Application\Sources">
+      <UniqueIdentifier>{d3831ed2-6a0b-4ff9-bd14-c620ee149b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\GameLogic">
+      <UniqueIdentifier>{5461fe47-6609-48e1-b89d-b8236a84f4a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Ecs">
+      <UniqueIdentifier>{fafb2fab-bc00-45a5-a8fd-2eea13af4e4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics">
+      <UniqueIdentifier>{e0337b42-8c6f-4953-9a51-76a93d67c6e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics\2d">
+      <UniqueIdentifier>{855b55b4-b377-410f-b4a5-85fabf8d81dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics\3d">
+      <UniqueIdentifier>{478d32be-5a8b-431a-beff-6320ea1c213d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Audio">
+      <UniqueIdentifier>{3c177ac1-9348-472a-b66f-f11dfb984fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\IA">
+      <UniqueIdentifier>{137c7ff2-5654-4816-a0e8-a825479d1c1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\EventSystem">
+      <UniqueIdentifier>{b7daf712-a631-4eb0-854a-2789857784fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Bomberman">
+      <UniqueIdentifier>{5f83b547-2c86-4eac-80aa-cece42516776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Bomberman\Logic">
+      <UniqueIdentifier>{c454a65b-76d0-4d99-85b7-9085506def3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Animation">
+      <UniqueIdentifier>{bd65ee09-c42f-4824-8331-5444ae7495d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Common">
+      <UniqueIdentifier>{f827f3fc-42b8-4c3b-9881-d0ee7984d1bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scripting">
+      <UniqueIdentifier>{63fccd1f-9c50-4b8d-948f-5c7e08df12c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics\imgui">
+      <UniqueIdentifier>{7f1df41d-476b-434e-9d3a-a4a5883d50c6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EventSystem\EventManager.cpp">
+      <Filter>Core\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameLogic\GameLogic.cpp">
+      <Filter>Core\GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\BaseGame.cpp">
+      <Filter>Core\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Ecs\Component.cpp">
+      <Filter>Core\Ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Ecs\GameObject.cpp">
+      <Filter>Core\Ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\3d\Camera.cpp">
+      <Filter>Core\Graphics\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\3d\Material.cpp">
+      <Filter>Core\Graphics\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\3d\Mesh.cpp">
+      <Filter>Core\Graphics\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Audio\AudioManager.cpp">
+      <Filter>Core\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EventSystem\GameEvent.cpp">
+      <Filter>Core\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Games\Event.cpp">
+      <Filter>Games\Bomberman\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Games\Logic.cpp">
+      <Filter>Games\Bomberman\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\OpenGL.cpp">
+      <Filter>Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\OpenGlErrorHandler.cpp">
+      <Filter>Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\OpenGLRender.cpp">
+      <Filter>Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Testbed\InstallApp.hpp">
+      <Filter>Testbed</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EventSystem\EventManager.hpp">
+      <Filter>Core\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameLogic\GameLogic.hpp">
+      <Filter>Core\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\BaseGame.hpp">
+      <Filter>Core\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Ecs\Component.hpp">
+      <Filter>Core\Ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Ecs\GameObject.hpp">
+      <Filter>Core\Ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\3d\Camera.hpp">
+      <Filter>Core\Graphics\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\3d\Material.hpp">
+      <Filter>Core\Graphics\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\3d\Mesh.hpp">
+      <Filter>Core\Graphics\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Audio\AudioManager.hpp">
+      <Filter>Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EventSystem\GameEvent.hpp">
+      <Filter>Core\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Games\Event.hpp">
+      <Filter>Games\Bomberman\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Games\Logic.hpp">
+      <Filter>Games\Bomberman\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Common\UUIDv4.hpp">
+      <Filter>Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\IRender.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\OpenGlErrorHandler.h">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Shader.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_truetype.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imconfig.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imgui.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3_loader.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,8 @@
+javascript
+https://v8.dev/docs/embed
+
+python
+https://docs.python.org/3/c-api/index.html#c-api-index
+
+Lua
+https://www.geeksforgeeks.org/integrating-lua-in-cpp/

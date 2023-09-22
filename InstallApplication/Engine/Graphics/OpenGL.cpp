@@ -12,12 +12,8 @@
 #include <glm/ext/matrix_clip_space.hpp> // projection
 
 #include <Engine/Graphics/GlfwWindowSystem.h>
-#include <Engine/Graphics/OpenGlErrorHandler.h>
+#include <Engine/Graphics/3d/Mesh.hpp>
 
-#define ASSERT(x) if (!(x)) __debugbreak();
-#define GlCall(x) glError->ClearError();\
-    x;\
-    ASSERT(glError->LogError(#x, __FILE__, __LINE__))
 
 class Layer {};
 
@@ -48,53 +44,6 @@ int RunApp() {
     return 0;
 }*/
 
-static unsigned int CompileShader(unsigned int type, std::string& shaderCode) {
-    unsigned int shader = glCreateShader(type);
-    const char* code = shaderCode.c_str();
-
-    glShaderSource(shader, 1, &code, nullptr);
-    glCompileShader(shader);
-
-    GLint compileStatus;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
-    if (compileStatus != GL_TRUE)
-    {
-        GLsizei log_length = 0;
-        GLchar message[1024];
-        glGetShaderInfoLog(shader, 1024, &log_length, message);
-        // Write the error to a log
-        std::cout << (type == GL_VERTEX_SHADER ? "vertex" : "fragmet") << " shader compile error: " << message << std::endl;
-    }
-
-    return shader;
-}
-
-static unsigned int CreateShader(std::string& vertex, std::string& fragment) {
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertex);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragment);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    GLint linkerStatus;
-    glGetProgramiv(program, GL_LINK_STATUS, &linkerStatus);
-    if (linkerStatus != GL_TRUE) {
-        GLsizei log_length = 0;
-        GLchar message[1024];
-        glGetShaderInfoLog(program, 1024, &log_length, message);
-        // Write the error to a log
-        std::cout << "shader linker error: " << message << std::endl;
-    }
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
-
 
 void RunOpenGlApp() {
     GlfwWindowSystem* windowSystem = new GlfwWindowSystem();
@@ -113,77 +62,11 @@ void RunOpenGlApp() {
         std::cout << "ImGui OpenGL Backend initialization failed!" << std::endl;
     }
 
-    OpenGlErrorHandler* glError = new OpenGlErrorHandler();
+    Mesh* rectangle = new Mesh(0.1f);
+    rectangle->SetUp();
 
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-
-    GLuint ibo;
-    glGenBuffers(1, &ibo);
-
-    //std::cout << "buffer: " << vbo << std::endl;
-
-    float vertices[12] = {
-        -0.8f, 0.2f,
-        -0.8f, 0.0f,
-        -0.6f, 0.2f,
-
-         //-0.6f, 0.2f,
-         //-0.8f, 0.0f,
-         -0.6f, 0.0f
-    };
-
-    GLuint indices[] = {
-        0, 1, 2,
-        1, 2, 3
-    };
-
-    glBindVertexArray(vao);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    std::string vertexShader = R"glsl(
-        #version 330 core
-        
-        layout(location = 0) in vec4 position;
-        
-        uniform vec4 u_Position;
-
-        void main() {
-            
-            gl_Position = position + u_Position;
-        } 
-    )glsl";
-
-    std::string fragmentShader = R"dem(
-        #version 330 core
-        
-        out vec4 color;
-        
-        uniform vec4 u_Color;
-
-        void main() {
-            vec4 ambientColor = vec4(1, 1, 1, 1.0) * 0.5;
-            color = u_Color * ambientColor;
-        }
-    )dem";
-
-    unsigned int shaderProgram = CreateShader(vertexShader, fragmentShader);
-    glUseProgram(shaderProgram);
-
-    GlCall(unsigned int fragColorUnId = glGetUniformLocation(shaderProgram, "u_Color"));
-    GlCall(glUniform4f(fragColorUnId, 0.2, 0.8, 0.3, 1.0));
-
-    GlCall(unsigned int vertexPosUnId = glGetUniformLocation(shaderProgram, "u_Position"));
-   
+    Mesh* rectangle2 = new Mesh(0.2f);
+    rectangle2->SetUp();
 
     // draw in wireframe mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -192,18 +75,17 @@ void RunOpenGlApp() {
 
     
     bool running = true;
-
-    float right = 0;
-
-    float time = 0;
+    double deltaTime = 0;
 
     //ImVec4 colors = ImVec4(0.1f, 0.1f, 0.1f, 0.1f);
     float colors[4] = { 0,0,0,0 };
 
     while (!glfwWindowShouldClose(windowSystem->GetWindow())) {
-        time = glfwGetTime();
+        deltaTime = glfwGetTime();
 
         glfwPollEvents();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
         // (Your code calls glfwPollEvents())
         // ...
@@ -255,23 +137,20 @@ void RunOpenGlApp() {
 
         ImGui::End();
 
-        GlCall(glUniform4f(vertexPosUnId, right, 0.5, 0.0, 1.0));
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        GlCall(glDrawElements(GL_TRIANGLES, std::size(indices), GL_UNSIGNED_INT, (const void*)0));
-
+       
         // Rendering
         // (Your code clears your framebuffer, renders your other stuff etc.)
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         // (Your code calls glfwSwapBuffers() etc.)
 
+        rectangle->Render(deltaTime);
+        rectangle2->Render(deltaTime);
 
         glfwSwapBuffers(windowSystem->GetWindow());
     }
 
-    glDeleteProgram(shaderProgram);
+    delete rectangle;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

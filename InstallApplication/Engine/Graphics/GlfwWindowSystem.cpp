@@ -20,7 +20,7 @@ GlfwWindowSystem::GlfwWindowSystem() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    this->window = glfwCreateWindow(800, 600, "Editor", NULL, NULL);
+    this->window = glfwCreateWindow(1200, 640, "Editor", NULL, NULL);
     if (!window) {
         std::cout << "GLFW Window or OpenGL context creation failed" << std::endl;
     }

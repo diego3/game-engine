@@ -3,14 +3,6 @@
 #include <map>
 #include <vector>
 
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-#include <Engine/Graphics/OpenGlErrorHandler.h>
-
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -19,12 +11,44 @@
 #include <glm/ext/matrix_transform.hpp> // translate, rotate, scale
 #include <glm/ext/matrix_clip_space.hpp> // projection
 
+#include <Engine/Graphics/GlfwWindowSystem.h>
+#include <Engine/Graphics/OpenGlErrorHandler.h>
+
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GlCall(x) glError->ClearError();\
     x;\
     ASSERT(glError->LogError(#x, __FILE__, __LINE__))
 
-static unsigned int CompileShader(unsigned int type, std::string &shaderCode) {
+class Layer {};
+
+/*
+int RunApp() {
+    std::vector<Layer> layers;
+
+    layers.push_back(new WindowLayer());
+    layers.push_back(new GUILayer());
+    layers.push_back(new OpenGLLessonsLayer());
+    layers.push_back(new EntityComponentLayer());
+
+    for (Layer layer : layers) {
+        if (!layer->Initialize()) {
+            std::cout << "Layer fail to initialize: " << layer->GetName() << std::endl;
+            return 1;
+        }
+    }
+
+    for (Layer layer : layers) {
+        layer->Run();
+    }
+
+    for (Layer layer : layers) {
+        layer->Finish();
+    }
+
+    return 0;
+}*/
+
+static unsigned int CompileShader(unsigned int type, std::string& shaderCode) {
     unsigned int shader = glCreateShader(type);
     const char* code = shaderCode.c_str();
 
@@ -71,67 +95,9 @@ static unsigned int CreateShader(std::string& vertex, std::string& fragment) {
     return program;
 }
 
-void error_callback(int error, const char* description) {
-    fprintf(stderr, "Glfw callback error: %s\n", description);
-}
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
-
-class Layer {};
-
-int RunApp() {
-    std::vector<Layer> layers;
-
-    layers.push_back(new WindowLayer());
-    layers.push_back(new GUILayer());
-    layers.push_back(new OpenGLLessonsLayer());
-    layers.push_back(new EntityComponentLayer());
-
-    for (Layer layer : layers) {
-        if (!layer->Initialize()) {
-            std::cout << "Layer fail to initialize: " << layer->GetName() << std::endl;
-            return 1;
-        }
-    }
-
-    for (Layer layer : layers) {
-        layer->Run();
-    }
-
-    for (Layer layer : layers) {
-        layer->Finish();
-    }
-
-    return 0;
-}
 
 void RunOpenGlApp() {
-    if (!glfwInit()) {
-        std::cout << "GLFW: Initialization failed" << std::endl;
-    }
-    glfwSetErrorCallback(error_callback);
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Editor", NULL, NULL);
-    if (!window) {
-        std::cout << "GLFW Window or OpenGL context creation failed" << std::endl;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSwapInterval(1);
-
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    glViewport(0, 0, width, height);
-
-    glewInit();
-
-    std::unique_ptr<OpenGlErrorHandler> glError = std::make_unique<OpenGlErrorHandler>();
+    GlfwWindowSystem* windowSystem = new GlfwWindowSystem();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -142,12 +108,12 @@ void RunOpenGlApp() {
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplGlfw_InitForOpenGL(windowSystem->GetWindow(), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
     if (!ImGui_ImplOpenGL3_Init()) {
         std::cout << "ImGui OpenGL Backend initialization failed!" << std::endl;
     }
 
-
+    OpenGlErrorHandler* glError = new OpenGlErrorHandler();
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
@@ -234,7 +200,7 @@ void RunOpenGlApp() {
     //ImVec4 colors = ImVec4(0.1f, 0.1f, 0.1f, 0.1f);
     float colors[4] = { 0,0,0,0 };
 
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(windowSystem->GetWindow())) {
         time = glfwGetTime();
 
         glfwPollEvents();
@@ -302,7 +268,7 @@ void RunOpenGlApp() {
         // (Your code calls glfwSwapBuffers() etc.)
 
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(windowSystem->GetWindow());
     }
 
     glDeleteProgram(shaderProgram);
@@ -311,6 +277,5 @@ void RunOpenGlApp() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    delete windowSystem;
 }

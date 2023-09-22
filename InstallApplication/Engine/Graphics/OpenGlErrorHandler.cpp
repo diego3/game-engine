@@ -41,7 +41,7 @@ std::string OpenGlErrorHandler::GetError(GLenum errorFlag) {
 	GlErrorMap::iterator iterator = glErrorMapping.find(errorFlag);
 
 	if (!iterator->second.empty()) {
-		return iterator->second;
+		return iterator->first + " : " + iterator->second;
 	}
 	return "invalid errorFlag";
 }

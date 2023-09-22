@@ -206,6 +206,7 @@
     <ClCompile Include="Engine\Physics\IPhysicSystem.cpp" />
     <ClCompile Include="Games\Event.cpp" />
     <ClCompile Include="Games\Logic.cpp" />
+    <ClCompile Include="Engine\Graphics\GlfwWindowSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Graphics\lessons\OpenGL01.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="Games\Logic.hpp" />
     <ClInclude Include="Engine\Graphics\Shader.h" />
     <ClInclude Include="Engine\Graphics\lessons\OpenGL01.h" />
+    <ClInclude Include="Engine\Graphics\GlfwWindowSystem.h" />
     <ClInclude Include="Testbed\InstallApp.hpp" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.h" />

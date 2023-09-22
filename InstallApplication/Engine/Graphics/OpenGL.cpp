@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -80,6 +81,34 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
+class Layer {};
+
+int RunApp() {
+    std::vector<Layer> layers;
+
+    layers.push_back(new WindowLayer());
+    layers.push_back(new GUILayer());
+    layers.push_back(new OpenGLLessonsLayer());
+    layers.push_back(new EntityComponentLayer());
+
+    for (Layer layer : layers) {
+        if (!layer->Initialize()) {
+            std::cout << "Layer fail to initialize: " << layer->GetName() << std::endl;
+            return 1;
+        }
+    }
+
+    for (Layer layer : layers) {
+        layer->Run();
+    }
+
+    for (Layer layer : layers) {
+        layer->Finish();
+    }
+
+    return 0;
+}
+
 void RunOpenGlApp() {
     if (!glfwInit()) {
         std::cout << "GLFW: Initialization failed" << std::endl;
@@ -88,9 +117,9 @@ void RunOpenGlApp() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW - Project", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Editor", NULL, NULL);
     if (!window) {
-        std::cout << "Window or OpenGL context creation failed" << std::endl;
+        std::cout << "GLFW Window or OpenGL context creation failed" << std::endl;
     }
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
@@ -114,7 +143,9 @@ void RunOpenGlApp() {
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    ImGui_ImplOpenGL3_Init();
+    if (!ImGui_ImplOpenGL3_Init()) {
+        std::cout << "ImGui OpenGL Backend initialization failed!" << std::endl;
+    }
 
 
 
@@ -200,6 +231,9 @@ void RunOpenGlApp() {
 
     float time = 0;
 
+    //ImVec4 colors = ImVec4(0.1f, 0.1f, 0.1f, 0.1f);
+    float colors[4] = { 0,0,0,0 };
+
     while (!glfwWindowShouldClose(window)) {
         time = glfwGetTime();
 
@@ -211,14 +245,48 @@ void RunOpenGlApp() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        //ImGui::ShowDemoWindow(); // Show demo window! :)
 
+        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+       // ImGui::ShowDemoWindow(); // Show demo window! :)
 
-        ImGui::SetNextWindowSize(ImVec2(100, 100));
-        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        bool my_tool_active = true;
+        ImGui::Begin("Scene Tree", &my_tool_active, ImGuiWindowFlags_MenuBar);
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Open..", "Ctrl+O")) {  }
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {  }
+                if (ImGui::MenuItem("Close", "Ctrl+W")) { my_tool_active = false; }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
 
-        ImGui::Begin("window2");
-        
+        ImGui::End();
+
+        bool my_tool_active2 = true;
+        ImGui::Begin("Game", &my_tool_active2, ImGuiWindowFlags_MenuBar);
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Open..", "Ctrl+O")) {}
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                if (ImGui::MenuItem("Close", "Ctrl+W")) { my_tool_active2 = false; }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+        ImGui::End();
+
+        ImGui::Begin("Components");
+        ImGui::ColorEdit4("color-edit-1", colors);
+            
+            ImGui::Begin("window-3");
+            ImGui::ColorEdit4("color-edit-2", colors);
+            ImGui::End();
+
         ImGui::End();
 
         GlCall(glUniform4f(vertexPosUnId, right, 0.5, 0.0, 1.0));

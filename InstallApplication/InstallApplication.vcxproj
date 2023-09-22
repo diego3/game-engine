@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
@@ -203,9 +203,11 @@
     <ClCompile Include="Engine\Graphics\OpenGL.cpp" />
     <ClCompile Include="Engine\Graphics\OpenGlErrorHandler.cpp" />
     <ClCompile Include="Engine\Graphics\OpenGLRender.cpp" />
+    <ClCompile Include="Engine\Physics\IPhysicSystem.cpp" />
     <ClCompile Include="Games\Event.cpp" />
     <ClCompile Include="Games\Logic.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Engine\Graphics\lessons\OpenGL01.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui.cpp" />
@@ -231,6 +233,7 @@
     <ClInclude Include="Games\Event.hpp" />
     <ClInclude Include="Games\Logic.hpp" />
     <ClInclude Include="Engine\Graphics\Shader.h" />
+    <ClInclude Include="Engine\Graphics\lessons\OpenGL01.h" />
     <ClInclude Include="Testbed\InstallApp.hpp" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.h" />
@@ -241,6 +244,9 @@
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_rectpack.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

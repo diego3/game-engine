@@ -139,6 +139,9 @@
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Physics\IPhysicSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testbed\InstallApp.hpp">
@@ -199,5 +202,8 @@
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3_loader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitignore" />
   </ItemGroup>
 </Project>

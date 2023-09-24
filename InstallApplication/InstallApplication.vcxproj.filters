@@ -148,6 +148,12 @@
     <ClCompile Include="Engine\Graphics\GlfwWindowSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\3d\CubeMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\ShaderCompiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testbed\InstallApp.hpp">
@@ -210,6 +216,8 @@
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="Engine\Graphics\lessons\OpenGL01.h" />
     <ClInclude Include="Engine\Graphics\GlfwWindowSystem.h" />
+    <ClInclude Include="Engine\Graphics\3d\CubeMesh.h" />
+    <ClInclude Include="Engine\Graphics\ShaderCompiler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />

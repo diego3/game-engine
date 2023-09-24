@@ -2,6 +2,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <thread>
+#include <stdio.h>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -13,6 +15,7 @@
 
 #include <Engine/Graphics/GlfwWindowSystem.h>
 #include <Engine/Graphics/3d/Mesh.hpp>
+#include <Engine/Graphics/3d/CubeMesh.h>
 
 
 class Layer {};
@@ -62,20 +65,19 @@ void RunOpenGlApp() {
         std::cout << "ImGui OpenGL Backend initialization failed!" << std::endl;
     }
 
-    Mesh* rectangle = new Mesh(0.1f);
-    rectangle->SetUp();
+    //Mesh* rectangle = new Mesh(0.1f);
+    //rectangle->SetUp();
 
-    Mesh* rectangle2 = new Mesh(0.2f);
-    rectangle2->SetUp();
+    CubeMesh* cube = new CubeMesh();
+    cube->SetUp();
 
     // draw in wireframe mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // draw back in fill
     //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); 
 
-    
-    bool running = true;
     double deltaTime = 0;
+    double elapsedFrameTime = 0;
 
     //ImVec4 colors = ImVec4(0.1f, 0.1f, 0.1f, 0.1f);
     float colors[4] = { 0,0,0,0 };
@@ -103,7 +105,9 @@ void RunOpenGlApp() {
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Open..", "Ctrl+O")) {  }
+                if (ImGui::MenuItem("Open..Sleep", "Ctrl+O")) { 
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
                 if (ImGui::MenuItem("Save", "Ctrl+S")) {  }
                 if (ImGui::MenuItem("Close", "Ctrl+W")) { my_tool_active = false; }
                 ImGui::EndMenu();
@@ -130,6 +134,10 @@ void RunOpenGlApp() {
 
         ImGui::Begin("Components");
         ImGui::ColorEdit4("color-edit-1", colors);
+        
+        char buf[80];
+        sprintf_s(buf, "frame elapsed time: %.4f", elapsedFrameTime);
+        ImGui::Text(buf);
             
             ImGui::Begin("window-3");
             ImGui::ColorEdit4("color-edit-2", colors);
@@ -144,13 +152,16 @@ void RunOpenGlApp() {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         // (Your code calls glfwSwapBuffers() etc.)
 
-        rectangle->Render(deltaTime);
-        rectangle2->Render(deltaTime);
+        //rectangle->Render(deltaTime);
+        cube->Render(deltaTime);
 
         glfwSwapBuffers(windowSystem->GetWindow());
+
+        elapsedFrameTime = glfwGetTime() - deltaTime;
     }
 
-    delete rectangle;
+    //delete rectangle;
+    delete cube;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

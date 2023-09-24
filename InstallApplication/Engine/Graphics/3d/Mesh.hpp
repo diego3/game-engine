@@ -3,6 +3,9 @@
 
 #include <Engine/Graphics/OpenGlErrorHandler.h>
 
+// https://free3d.com/3d-model/intergalactic-spaceship-in-blender-28-eevee-394046.html
+// http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
+
 class Mesh {
 public:
 	Mesh(float velocity);

@@ -1,63 +1,15 @@
 #include <string>
 #include <iostream>
 
-
 #include "Mesh.hpp"
 #include <Engine/Graphics/GlfwWindowSystem.h>
 #include <Engine/Graphics/OpenGlErrorHandler.h>
+#include <Engine/Graphics/ShaderCompiler.h>
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GlCall(x) glError->ClearError();\
     x;\
     ASSERT(glError->LogError(#x, __FILE__, __LINE__))
-
-static unsigned int CompileShader(unsigned int type, std::string& shaderCode) {
-    unsigned int shader = glCreateShader(type);
-    const char* code = shaderCode.c_str();
-
-    glShaderSource(shader, 1, &code, nullptr);
-    glCompileShader(shader);
-
-    GLint compileStatus;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
-    if (compileStatus != GL_TRUE)
-    {
-        GLsizei log_length = 0;
-        GLchar message[1024];
-        glGetShaderInfoLog(shader, 1024, &log_length, message);
-        // Write the error to a log
-        std::cout << (type == GL_VERTEX_SHADER ? "vertex" : "fragmet") << " shader compile error: " << message << std::endl;
-    }
-
-    return shader;
-}
-
-static unsigned int CreateShader(std::string& vertex, std::string& fragment) {
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertex);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragment);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    GLint linkerStatus;
-    glGetProgramiv(program, GL_LINK_STATUS, &linkerStatus);
-    if (linkerStatus != GL_TRUE) {
-        GLsizei log_length = 0;
-        GLchar message[1024];
-        glGetShaderInfoLog(program, 1024, &log_length, message);
-        // Write the error to a log
-        std::cout << "shader linker error: " << message << std::endl;
-    }
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
-
 
 Mesh::Mesh(float velocity)
 {
@@ -74,26 +26,14 @@ void Mesh::SetUp()
 {
     this->glError = new OpenGlErrorHandler();
 
-    GLuint vbo;
-    GlCall(glGenBuffers(1, &vbo));
-    GlCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-
-    GLuint vao;
-    GlCall(glGenVertexArrays(1, &vao));
-
-    GLuint ibo;
-    GlCall(glGenBuffers(1, &ibo));
-
-    //std::cout << "buffer: " << vbo << std::endl;
-
     float vertices[8] = {
-        -0.5f, 0.2f,
-        -0.5f, 0.0f,
-        -0.6f, 0.2f,
+       -0.5f, 0.2f,
+       -0.5f, 0.0f,
+       -0.6f, 0.2f,
 
-        //-0.6f, 0.2f,
-        //-0.8f, 0.0f,
-        -0.6f, 0.0f
+       //-0.6f, 0.2f,
+       //-0.8f, 0.0f,
+       -0.6f, 0.0f
     };
 
     indices = {
@@ -101,9 +41,24 @@ void Mesh::SetUp()
         1, 2, 3
     };
 
+    GLuint vbo;
+    GlCall(glGenBuffers(1, &vbo));
+    GlCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+
+    GLuint vao;
+    GlCall(glGenVertexArrays(1, &vao));
     GlCall(glBindVertexArray(vao));
+
     GlCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
-    GlCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0));
+    //GlCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0));
+    GlCall(glVertexAttribPointer(
+        0,                                // attribute. No particular reason for 0, but must match the layout in the shader.
+        2,                                // size
+        GL_FLOAT,                         // type
+        GL_FALSE,                         // normalized?
+        2 * sizeof(float),                // stride
+        (void*)0                          // array buffer offset
+    ));
     GlCall(glEnableVertexAttribArray(0));
 
     GLuint indicesData[6];
@@ -111,9 +66,11 @@ void Mesh::SetUp()
         indicesData[i] = indices[i];
     }
 
+    GLuint ibo;
+    GlCall(glGenBuffers(1, &ibo));
     GlCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
     GlCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicesData), indicesData, GL_STATIC_DRAW));
-
+   
     std::string vertexShader = R"glsl(
         #version 330 core
         
@@ -140,7 +97,7 @@ void Mesh::SetUp()
         }
     )dem";
 
-    this->shaderProgram = CreateShader(vertexShader, fragmentShader);
+    this->shaderProgram = ShaderCompiler::Create(vertexShader, fragmentShader);
     GlCall(glUseProgram(shaderProgram));
 
     GlCall(this->fragColorUnId = glGetUniformLocation(shaderProgram, "u_Color"));

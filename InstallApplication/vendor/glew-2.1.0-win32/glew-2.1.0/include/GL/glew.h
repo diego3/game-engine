@@ -7782,8 +7782,28 @@ typedef void (GLAPIENTRY * PFNGLDELETEVERTEXARRAYSPROC) (GLsizei n, const GLuint
 typedef void (GLAPIENTRY * PFNGLGENVERTEXARRAYSPROC) (GLsizei n, GLuint* arrays);
 typedef GLboolean (GLAPIENTRY * PFNGLISVERTEXARRAYPROC) (GLuint array);
 
+/*
+glBindVertexArray() does three things. When using the value array that
+is other than zero and was returned from glGenVertexArrays(), a new
+vertex-array object is created and assigned that name. When binding to a
+previously created vertex-array object, that vertex array object becomes
+active, which additionally affects the vertex array state stored in the
+object. When binding to an array value of zero, OpenGL stops using
+application-allocated vertex-array objects and returns to the default state
+for vertex arrays.
+A GL_INVALID_OPERATION error is generated if array is not a value
+previously returned from glGenVertexArrays(), or if it is a value that has
+been released by glDeleteVertexArrays().*/
 #define glBindVertexArray GLEW_GET_FUN(__glewBindVertexArray)
 #define glDeleteVertexArrays GLEW_GET_FUN(__glewDeleteVertexArrays)
+
+/*
+void glGenVertexArrays(GLsizei n, GLuint *arrays);
+Returns n currently unused names for use as vertex-array objects in the
+array arrays. The names returned are marked as used for the purposes
+of allocating additional buffer objects, and initialized with values
+representing the default state of the collection of uninitialized vertex
+arrays.*/
 #define glGenVertexArrays GLEW_GET_FUN(__glewGenVertexArrays)
 #define glIsVertexArray GLEW_GET_FUN(__glewIsVertexArray)
 

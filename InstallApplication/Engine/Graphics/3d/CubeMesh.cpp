@@ -3,6 +3,7 @@
 #include <Engine/Graphics/GlfwWindowSystem.h>
 #include <Engine/Graphics/OpenGlErrorHandler.h>
 #include <Engine/Graphics/ShaderCompiler.h>
+#include <Engine/Graphics/3d/Camera.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>  // translate, rotate, scale
@@ -18,7 +19,9 @@
 
 CubeMesh::CubeMesh()
 {
-    
+    this->rotation = glm::vec3(0, 0, 0);
+    this->scaling  = glm::vec3(1.f, 1.f, 1.f);
+    this->position = glm::vec3(0, 0, 0);
 }
 
 CubeMesh::~CubeMesh()
@@ -37,45 +40,6 @@ void CubeMesh::SetUp()
 
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     // A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
-    GLfloat vertices_tutorial1[] = {
-        -1.0f,-1.0f,-1.0f, // triangle 1 : begin
-        -1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f, // triangle 1 : end
-        1.0f, 1.0f,-1.0f, // triangle 2 : begin
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f, // triangle 2 : end
-        1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f
-    };
-
     float vertices[] = {
      -0.5f, -0.5f, -0.5f,
       0.5f, -0.5f, -0.5f,
@@ -144,6 +108,7 @@ void CubeMesh::SetUp()
         #version 330 core
         
         layout(location = 0) in vec3 position;
+        layout(location = 1) in vec2 textCoord;
         
         uniform mat4 model;
         uniform mat4 view;
@@ -173,29 +138,46 @@ void CubeMesh::SetUp()
     
 }
 
-void CubeMesh::Render(double deltaTime)
+void CubeMesh::VRender(Camera* camera, double deltaTime)
 {
     GlCall(glUseProgram(shaderProgram));
 
+    // TODO transform component !!!!
+    float rotationAngle = (float)deltaTime * glm::radians(50.0f);
+
+    
+    // identity matrix -> world coordinate
     glm::mat4 model = glm::mat4(1.0f);
-   // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    // RST: Rotate, Scale, Transform
+    model = glm::rotate(model, rotationAngle, rotation);
+    model = glm::scale(model, scaling);
+    model = glm::translate(model, position);
 
-    model = glm::rotate(model, (float)deltaTime * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    
 
-    glm::mat4 view = glm::mat4(1.0f);
-    // note that we're translating the scene in the reverse direction of where we want to move
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(45.0f), 1200.f / 640.0f, 0.1f, 100.0f);
 
     GLint modelLoc = glGetUniformLocation(this->shaderProgram, "model");
     GLint viewlLoc = glGetUniformLocation(this->shaderProgram, "view");
     GLint projectionlLoc = glGetUniformLocation(this->shaderProgram, "projection");
 
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(viewlLoc, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(projectionlLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(viewlLoc, 1, GL_FALSE, glm::value_ptr(camera->GetView()));
+    glUniformMatrix4fv(projectionlLoc, 1, GL_FALSE, glm::value_ptr(camera->GetProjection()));
 
     GlCall(glDrawArrays(GL_TRIANGLES, 0, 12 * 3)); // 12*3 indices starting at 0 -> 12 triangles -> 6 squares
+}
+
+void CubeMesh::SetPosition(glm::vec3 pos)
+{
+    this->position = pos;
+}
+
+void CubeMesh::SetScale(glm::vec3 scale)
+{
+    this->scaling = scale;
+}
+
+void CubeMesh::SetRotation(glm::vec3 rotation)
+{
+    this->rotation = rotation;
 }

@@ -1,28 +1,49 @@
 #include "EventManager.hpp"
+#include <plog/Log.h>
+#include <memory>
 
-EventManager::EventManager() {}
+EventManager::EventManager() 
+{
+    m_pEventQueue = std::vector<std::shared_ptr<IEvent>>();
+}
 
-void EventManager::AddListener(EventListener listener, Event event) {
-    std::vector<EventListener> listeners = listenersMap[event];
+void EventManager::AddListener(EventListener listener, std::string eventName) {
+    std::vector<EventListener> listeners = m_listenersMap[eventName];
     if (!listener) {
         listeners = std::vector<EventListener>::vector();
     }
     listeners.push_back(listener);
 
-    listenersMap[event] = listeners;
+    m_listenersMap[eventName] = listeners;
 }
 
 void EventManager::Update(float elapsedTime) {
+    if (this->m_pEventQueue.empty())
+    {
+        PLOG_DEBUG << "event queue is empty";
+    }
 
-}
-
-void EventManager::TriggerEvent(Event event, GameEvent* gameEvent) {
-    std::vector<EventListener> listeners = this->listenersMap[event];
-    for (EventListener listener : listeners) {
-        listener(gameEvent);
+    for (std::shared_ptr<IEvent> event : this->m_pEventQueue) {
+        this->TriggerEvent(event);
     }
 }
 
-void EventManager::TriggetEvent(Event event)
+void EventManager::TriggerEvent(std::shared_ptr<IEvent> event) {
+    std::vector<EventListener> listeners = this->m_listenersMap[event->GetName()];
+    for (EventListener listener : listeners) {
+        listener(event);
+    }
+}
+
+void EventManager::QueueEvent(std::shared_ptr<IEvent> event)
 {
+    this->m_pEventQueue.emplace_back(event);
+}
+
+EventManager* EventManager::Get()
+{
+    if (!instance) {
+        instance = new EventManager();
+    }
+    return instance;
 }

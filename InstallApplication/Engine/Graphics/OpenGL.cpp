@@ -5,71 +5,71 @@
 #include <thread>
 #include <stdio.h>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include <plog/Log.h>
+#include <plog/Init.h>
+#include <plog/Formatters/TxtFormatter.h>
+#include <plog/Initializers/ConsoleInitializer.h>
 
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp> // translate, rotate, scale
 #include <glm/ext/matrix_clip_space.hpp> // projection
 
 #include <Engine/Graphics/GlfwWindowSystem.h>
+#include <Engine/Graphics/ui/UIManager.h>
 #include <Engine/Graphics/3d/Mesh.hpp>
 #include <Engine/Graphics/3d/CubeMesh.h>
+#include <Engine/Graphics/3d/Camera.hpp>
+
+#include <Engine/EventSystem/EventManager.hpp>
+#include <Engine/Graphics/SceneManager.h>
+#include <Engine/Scripting/ScriptSystem.h>
+#include <Engine/Ecs/ActorFactory.h>
 
 
-class Layer {};
-
-/*
-int RunApp() {
-    std::vector<Layer> layers;
-
-    layers.push_back(new WindowLayer());
-    layers.push_back(new GUILayer());
-    layers.push_back(new OpenGLLessonsLayer());
-    layers.push_back(new EntityComponentLayer());
-
-    for (Layer layer : layers) {
-        if (!layer->Initialize()) {
-            std::cout << "Layer fail to initialize: " << layer->GetName() << std::endl;
-            return 1;
-        }
-    }
-
-    for (Layer layer : layers) {
-        layer->Run();
-    }
-
-    for (Layer layer : layers) {
-        layer->Finish();
-    }
-
-    return 0;
-}*/
-
-
+// TODO make this an Application class
+// TODO handle windows events like user minimize, user tab to other apps: might Glew handles this events
 void RunOpenGlApp() {
+    // Logger initialization: tail game-engine-log.txt -f
+    //plog::init(plog::verbose, "game-engine-log.txt", 10000, 1); FileInitializer
+    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::verbose, &consoleAppender);
+    PLOG_DEBUG << "Log initialization success";
+
     GlfwWindowSystem* windowSystem = new GlfwWindowSystem();
+    
+    EventManager::Get();
 
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+    UIManager* uiManager = new UIManager();
+    uiManager->Initialize(windowSystem);
 
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(windowSystem->GetWindow(), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    if (!ImGui_ImplOpenGL3_Init()) {
-        std::cout << "ImGui OpenGL Backend initialization failed!" << std::endl;
-    }
+    Camera* mainCamera = new Camera();
+    SceneManager* sceneManager = new SceneManager(mainCamera);
 
-    //Mesh* rectangle = new Mesh(0.1f);
-    //rectangle->SetUp();
+    ScriptSystem* scriptSystem = new ScriptSystem();
+    scriptSystem->Initialize();
 
-    CubeMesh* cube = new CubeMesh();
-    cube->SetUp();
+    ActorFactory* actorFactory = new ActorFactory();
+    
+   
+    // TODO load compos from xml !!!
+    CubeMesh* cube1 = new CubeMesh();
+    cube1->SetUp();
+    cube1->SetRotation(glm::vec3(0.5, 1.f, 0));
+    cube1->SetPosition(glm::vec3(2.4f, 0, 0));
+    cube1->SetScale(glm::vec3(0.2, 0.5, 0.2));
+    sceneManager->AddNode(cube1);
+
+
+    CubeMesh* cube2 = new CubeMesh();
+    cube2->SetUp();
+    cube2->SetRotation(glm::vec3(0, 1.f, 2.4f));
+    cube2->SetPosition(glm::vec3(0, 0, 0));
+    cube2->SetScale(glm::vec3(0.5, 0.5, 0.5));
+    sceneManager->AddNode(cube2);
+
+    // TODO add event manager !!!
+    EventListener sceneListener = std::bind(&SceneManager::OnNewRender, sceneManager, std::placeholders::_1);
+    EventManager::Get()->AddListener(sceneListener, NewRenderEvent::EventName);
 
     // draw in wireframe mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -79,9 +79,6 @@ void RunOpenGlApp() {
     double deltaTime = 0;
     double elapsedFrameTime = 0;
 
-    //ImVec4 colors = ImVec4(0.1f, 0.1f, 0.1f, 0.1f);
-    float colors[4] = { 0,0,0,0 };
-
     while (!glfwWindowShouldClose(windowSystem->GetWindow())) {
         deltaTime = glfwGetTime();
 
@@ -89,83 +86,22 @@ void RunOpenGlApp() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-        // (Your code calls glfwPollEvents())
-        // ...
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        uiManager->Render(deltaTime);
+        sceneManager->Render(deltaTime);
 
-        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-       // ImGui::ShowDemoWindow(); // Show demo window! :)
-
-        bool my_tool_active = true;
-        ImGui::Begin("Scene Tree", &my_tool_active, ImGuiWindowFlags_MenuBar);
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("Open..Sleep", "Ctrl+O")) { 
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                if (ImGui::MenuItem("Save", "Ctrl+S")) {  }
-                if (ImGui::MenuItem("Close", "Ctrl+W")) { my_tool_active = false; }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
-        }
-
-        ImGui::End();
-
-        bool my_tool_active2 = true;
-        ImGui::Begin("Game", &my_tool_active2, ImGuiWindowFlags_MenuBar);
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("Open..", "Ctrl+O")) {}
-                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-                if (ImGui::MenuItem("Close", "Ctrl+W")) { my_tool_active2 = false; }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
-        }
-        ImGui::End();
-
-        ImGui::Begin("Components");
-        ImGui::ColorEdit4("color-edit-1", colors);
         
-        char buf[80];
-        sprintf_s(buf, "frame elapsed time: %.4f", elapsedFrameTime);
-        ImGui::Text(buf);
-            
-            ImGui::Begin("window-3");
-            ImGui::ColorEdit4("color-edit-2", colors);
-            ImGui::End();
-
-        ImGui::End();
-
-       
-        // Rendering
-        // (Your code clears your framebuffer, renders your other stuff etc.)
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        // (Your code calls glfwSwapBuffers() etc.)
-
-        //rectangle->Render(deltaTime);
-        cube->Render(deltaTime);
-
         glfwSwapBuffers(windowSystem->GetWindow());
 
         elapsedFrameTime = glfwGetTime() - deltaTime;
     }
 
-    //delete rectangle;
-    delete cube;
+    
+    delete actorFactory;
+    delete scriptSystem;
+    delete sceneManager;
+    delete mainCamera;
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    uiManager->Destroy();
 
     delete windowSystem;
 }

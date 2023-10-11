@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Diego\SFMLBook\InstallApplication;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glm;C:\Users\Diego\SFMLBook\InstallApplication\vendor\imgui-1.89.9-2\imgui\backends;C:\Users\Diego\SFMLBook\InstallApplication\vendor\imgui-1.89.9-2\imgui;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glfw-3.3.8.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Diego\SFMLBook\InstallApplication;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glm;C:\Users\Diego\SFMLBook\InstallApplication\vendor\imgui-1.89.9-2\imgui\backends;C:\Users\Diego\SFMLBook\InstallApplication\vendor\imgui-1.89.9-2\imgui;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glfw-3.3.8.bin.WIN32\include;C:\Users\Diego\SFMLBook\InstallApplication\vendor\sbt-image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,13 +163,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Diego\SFMLBook\InstallApplication\3thpart\glfw-3.3.8.bin.WIN32\include;C:\Users\Diego\SFMLBook\InstallApplication;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\Box2d\include;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\glm;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\imgui-1.89.9;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\glew-2.1.0-win32\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Diego\SFMLBook\InstallApplication\vendor\glfw-3.3.8.bin.WIN64\include;C:\Users\Diego\SFMLBook\InstallApplication;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glm;C:\Users\Diego\SFMLBook\InstallApplication\vendor\imgui-1.89.9-2\imgui;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Diego\SFMLBook\InstallApplication\vendor\imgui-1.89.9-2\imgui\backends;C:\Users\Diego\SFMLBook\InstallApplication\vendor\sbt-image;C:\Users\Diego\SFMLBook\InstallApplication\vendor\lua-script\lua-5.4.6\src;C:\Users\Diego\SFMLBook\InstallApplication\vendor\lua-script\sol2-develop\include;C:\Users\Diego\SFMLBook\InstallApplication\vendor\tinyxml2-master;C:\Users\Diego\SFMLBook\InstallApplication\vendor\plog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Diego\SFMLBook\InstallApplication\3thpart\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\Box2d\lib;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\freetype\lib;C:\Users\Diego\SFMLBook\InstallApplication\3thpart\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3_mt.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;ws2_32.lib;box2d.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Diego\SFMLBook\InstallApplication\vendor\glfw-3.3.8.bin.WIN64\lib-vc2022;C:\Users\Diego\SFMLBook\InstallApplication\vendor\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Users\Diego\SFMLBook\InstallApplication\vendor\lua-script\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3_mt.lib;opengl32.lib;winmm.lib;gdi32.lib;ws2_32.lib;glew32s.lib;Lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -189,21 +190,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Ecs\Comps\BaseRenderComponent.cpp" />
+    <ClCompile Include="Engine\Ecs\Actor.cpp" />
+    <ClCompile Include="Engine\Ecs\ActorFactory.cpp" />
     <ClCompile Include="Engine\Graphics\3d\CubeMesh.cpp" />
     <ClCompile Include="Engine\Graphics\Shader.cpp" />
-    <ClCompile Include="Engine\Application\BaseGame.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
-    <ClCompile Include="Engine\Ecs\Component.cpp" />
-    <ClCompile Include="Engine\Ecs\GameObject.cpp" />
     <ClCompile Include="Engine\EventSystem\EventManager.cpp" />
-    <ClCompile Include="Engine\EventSystem\GameEvent.cpp" />
-    <ClCompile Include="Engine\GameLogic\GameLogic.cpp" />
+    <ClCompile Include="Engine\EventSystem\GameEvents.cpp" />
     <ClCompile Include="Engine\Graphics\3d\Camera.cpp" />
     <ClCompile Include="Engine\Graphics\3d\Material.cpp" />
     <ClCompile Include="Engine\Graphics\3d\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\OpenGL.cpp" />
     <ClCompile Include="Engine\Graphics\OpenGlErrorHandler.cpp" />
     <ClCompile Include="Engine\Graphics\OpenGLRender.cpp" />
+    <ClCompile Include="Engine\IO\AssetManager.cpp" />
     <ClCompile Include="Engine\Physics\IPhysicSystem.cpp" />
     <ClCompile Include="Games\Event.cpp" />
     <ClCompile Include="Games\Logic.cpp" />
@@ -211,6 +212,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Graphics\lessons\OpenGL01.cpp" />
     <ClCompile Include="Engine\Graphics\ShaderCompiler.cpp" />
+    <ClCompile Include="Engine\IO\TextureLoader.cpp" />
+    <ClCompile Include="Engine\Graphics\2d\Texture.cpp" />
+    <ClCompile Include="Engine\Graphics\SceneManager.cpp" />
+    <ClCompile Include="Engine\Graphics\ui\UIManager.cpp" />
+    <ClCompile Include="Engine\Scripting\ScriptSystem.cpp" />
+    <ClCompile Include="Engine\Ecs\Comps\TransformComponent.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui.cpp" />
@@ -218,29 +225,39 @@
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_draw.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_tables.cpp" />
     <ClCompile Include="vendor\imgui-1.89.9-2\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\tinyxml2-master\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Ecs\Comps\BaseRenderComponent.h" />
+    <ClInclude Include="Engine\Ecs\Actor.h" />
+    <ClInclude Include="Engine\Ecs\ActorFactory.h" />
+    <ClInclude Include="Engine\Ecs\ActorComponent.h" />
     <ClInclude Include="Engine\Graphics\3d\CubeMesh.h" />
     <ClInclude Include="Engine\Application\BaseGame.hpp" />
     <ClInclude Include="Engine\Audio\AudioManager.hpp" />
     <ClInclude Include="Engine\Common\UUIDv4.hpp" />
-    <ClInclude Include="Engine\Ecs\Component.hpp" />
-    <ClInclude Include="Engine\Ecs\GameObject.hpp" />
     <ClInclude Include="Engine\EventSystem\EventManager.hpp" />
     <ClInclude Include="Engine\EventSystem\GameEvent.hpp" />
-    <ClInclude Include="Engine\GameLogic\GameLogic.hpp" />
     <ClInclude Include="Engine\Graphics\3d\Camera.hpp" />
     <ClInclude Include="Engine\Graphics\3d\Material.hpp" />
     <ClInclude Include="Engine\Graphics\3d\Mesh.hpp" />
     <ClInclude Include="Engine\Graphics\IRender.hpp" />
+    <ClInclude Include="Engine\Graphics\ISceneNode.h" />
     <ClInclude Include="Engine\Graphics\OpenGlErrorHandler.h" />
+    <ClInclude Include="Engine\IO\AssetManager.hpp" />
     <ClInclude Include="Games\Event.hpp" />
     <ClInclude Include="Games\Logic.hpp" />
     <ClInclude Include="Engine\Graphics\Shader.h" />
     <ClInclude Include="Engine\Graphics\lessons\OpenGL01.h" />
     <ClInclude Include="Engine\Graphics\GlfwWindowSystem.h" />
     <ClInclude Include="Engine\Graphics\ShaderCompiler.h" />
+    <ClInclude Include="Engine\Graphics\SceneManager.h" />
+    <ClInclude Include="Engine\Scripting\ScriptSystem.h" />
     <ClInclude Include="Testbed\InstallApp.hpp" />
+    <ClInclude Include="Engine\IO\TextureLoader.h" />
+    <ClInclude Include="Engine\Graphics\2d\Texture.h" />
+    <ClInclude Include="Engine\Graphics\ui\UIManager.h" />
+    <ClInclude Include="Engine\Ecs\Comps\TransformComponent.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\backends\imgui_impl_opengl3_loader.h" />
@@ -250,9 +267,12 @@
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_rectpack.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui-1.89.9-2\imgui\imstb_truetype.h" />
+    <ClInclude Include="vendor\tinyxml2-master\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="Assets\Shaders\base.frag" />
+    <None Include="Assets\Shaders\base.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

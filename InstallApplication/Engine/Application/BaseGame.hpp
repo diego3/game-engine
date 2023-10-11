@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 
@@ -7,11 +9,11 @@
 // specific games should implement this base class
 class AbstractGame {
 public:
-	void Init();
+	virtual void VInit() {};
 
-	void Update(float elapsedTime);
+	virtual void VUpdate(float elapsedTime) {};
 
-	void Render();
+	virtual void VRender() {};
 
 private:
 	std::string name;

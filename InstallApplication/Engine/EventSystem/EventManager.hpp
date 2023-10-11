@@ -1,51 +1,33 @@
+#pragma once
+
 #include <functional>
 #include <iostream>
 #include <functional>
+#include <memory>
 #include <map>
 #include <vector>
 
-enum class Event {
-    GO_RIGHT,
-    GO_LEFT,
-    GO_UP,
-    GO_DOWN,
-    COLLISION_ENTER
-};
+#include "GameEvent.hpp"
 
-class GameEvent {
-
-public:
-    GameEvent(Event event) {
-        this->event = event;
-    }
-
-    Event GetEvent() {
-        return event;
-    };
-private:
-    std::string uuid;
-
-    std::string gameObjectId;
-    
-    Event event;
-};
-
-typedef std::function<void(GameEvent*)> EventListener;
+typedef std::function<void(std::shared_ptr<IEvent>)> EventListener;
 
 class EventManager {
 public:
-    EventManager();
-
-    void AddListener(EventListener listener, Event event);
+    void AddListener(EventListener listener, std::string eventName);
 
     void Update(float elapsedTime);
 
-    void TriggerEvent(Event event, GameEvent* gameEvent);
+    void TriggerEvent(std::shared_ptr<IEvent> gameEvent);
 
-    void TriggetEvent(Event event);
-
+    void QueueEvent(std::shared_ptr<IEvent> event);
+    
+    static EventManager* Get();
 private:
-    std::map<Event, std::vector<EventListener>> listenersMap;
+    inline static EventManager* instance = nullptr;
 
-    std::vector<Event> eventQueue;
+    EventManager();
+    // key = event name
+    std::map<std::string, std::vector<EventListener>> m_listenersMap;
+
+    std::vector<std::shared_ptr<IEvent>> m_pEventQueue;
 };

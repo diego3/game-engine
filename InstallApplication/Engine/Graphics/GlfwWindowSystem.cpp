@@ -10,6 +10,25 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
+
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+
+    }
+    if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+
+    }
+}
+
+static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+
+}
+
+static void mouse_scroll_callback(GLFWwindow* window, double xoffet, double yoffer) {
+
+}
+
+static void joystick_connection_callback(int jid, int event) {
+    std::cout << "jid: " << jid << " event: " << event << std::endl;
 }
 
 GlfwWindowSystem::GlfwWindowSystem() {
@@ -26,6 +45,10 @@ GlfwWindowSystem::GlfwWindowSystem() {
     }
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, mouse_scroll_callback);
+    glfwSetJoystickCallback(joystick_connection_callback);
+    
     glfwSwapInterval(1);
 
     //testar, ta estranho essa sintaxe &this

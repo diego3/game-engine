@@ -73,18 +73,6 @@
     <ClCompile Include="Engine\EventSystem\EventManager.cpp">
       <Filter>Core\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\GameLogic\GameLogic.cpp">
-      <Filter>Core\GameLogic</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Application\BaseGame.cpp">
-      <Filter>Core\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Ecs\Component.cpp">
-      <Filter>Core\Ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Ecs\GameObject.cpp">
-      <Filter>Core\Ecs</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\3d\Camera.cpp">
       <Filter>Core\Graphics\3d</Filter>
     </ClCompile>
@@ -97,7 +85,7 @@
     <ClCompile Include="Engine\Audio\AudioManager.cpp">
       <Filter>Core\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EventSystem\GameEvent.cpp">
+    <ClCompile Include="Engine\EventSystem\GameEvents.cpp">
       <Filter>Core\EventSystem</Filter>
     </ClCompile>
     <ClCompile Include="Games\Event.cpp">
@@ -154,6 +142,39 @@
     <ClCompile Include="Engine\Graphics\ShaderCompiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\IO\TextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IO\AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\2d\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\ui\UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scripting\ScriptSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Ecs\Actor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Ecs\ActorFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Ecs\Comps\TransformComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Ecs\Comps\BaseRenderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\tinyxml2-master\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testbed\InstallApp.hpp">
@@ -162,17 +183,8 @@
     <ClInclude Include="Engine\EventSystem\EventManager.hpp">
       <Filter>Core\EventSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GameLogic\GameLogic.hpp">
-      <Filter>Core\GameLogic</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Application\BaseGame.hpp">
       <Filter>Core\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Ecs\Component.hpp">
-      <Filter>Core\Ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Ecs\GameObject.hpp">
-      <Filter>Core\Ecs</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\3d\Camera.hpp">
       <Filter>Core\Graphics\3d</Filter>
@@ -218,8 +230,23 @@
     <ClInclude Include="Engine\Graphics\GlfwWindowSystem.h" />
     <ClInclude Include="Engine\Graphics\3d\CubeMesh.h" />
     <ClInclude Include="Engine\Graphics\ShaderCompiler.h" />
+    <ClInclude Include="Engine\IO\TextureLoader.h" />
+    <ClInclude Include="Engine\IO\AssetManager.hpp" />
+    <ClInclude Include="Engine\Graphics\2d\Texture.h" />
+    <ClInclude Include="Engine\Graphics\SceneManager.h" />
+    <ClInclude Include="Engine\Graphics\ISceneNode.h" />
+    <ClInclude Include="Engine\Graphics\ui\UIManager.h" />
+    <ClInclude Include="Engine\Scripting\ScriptSystem.h" />
+    <ClInclude Include="Engine\Ecs\Actor.h" />
+    <ClInclude Include="Engine\Ecs\ActorFactory.h" />
+    <ClInclude Include="Engine\Ecs\ActorComponent.h" />
+    <ClInclude Include="Engine\Ecs\Comps\TransformComponent.h" />
+    <ClInclude Include="Engine\Ecs\Comps\BaseRenderComponent.h" />
+    <ClInclude Include="vendor\tinyxml2-master\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="Assets\Shaders\base.frag" />
+    <None Include="Assets\Shaders\base.vert" />
   </ItemGroup>
 </Project>
